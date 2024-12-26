@@ -14,14 +14,14 @@ export function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="text-[#E6E1E5] text-xl font-medium">
-              Logo
+              Home
             </Link>
             <nav className="ml-8">
               <Link 
                 href="/appointment" 
                 className="text-[#E6E1E5] hover:text-[#D0BCFF] transition-colors duration-200"
               >
-                预约服务
+                Book Appointment
               </Link>
             </nav>
           </div>
