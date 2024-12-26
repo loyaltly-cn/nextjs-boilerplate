@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/db'
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 
 export async function GET() {
   try {
@@ -25,7 +25,8 @@ export async function GET() {
     })
 
     return NextResponse.json(users)
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error('Failed to fetch users:', error)
     return NextResponse.json(
       { error: 'Failed to fetch users' },
       { status: 500 }
@@ -40,7 +41,8 @@ export async function POST(request: Request) {
       data: json,
     })
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error('Failed to create user:', error)
     return NextResponse.json({ error: 'Failed to create user' }, { status: 500 })
   }
 }
@@ -64,7 +66,8 @@ export async function DELETE(request: Request) {
     })
 
     return NextResponse.json({ message: 'User deleted successfully' })
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error('Failed to delete user:', error)
     return NextResponse.json(
       { error: 'Failed to delete user' },
       { status: 500 }

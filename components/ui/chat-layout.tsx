@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { ChatAssistant } from './chat-assistant'
 
-const HIDDEN_PATHS = [
+const HIDDEN_PATHS: string[] = [
   '/login',
   '/register',
   '/forgot-password',

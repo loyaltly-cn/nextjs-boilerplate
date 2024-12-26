@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Ripple } from '@/components/ui/ripple'
 import { toast } from '@/components/ui/toast'
 import { md5 } from '@/lib/utils'
+import Image from 'next/image'
 
 // 添加一个简单的淡入动画类
 const fadeIn = "animate-[fadeIn_0.3s_ease-in-out]"
@@ -247,7 +248,13 @@ export default function Login() {
                 className="relative w-full inline-flex justify-center items-center py-3 px-4 rounded-full border border-[#48464C] bg-[#2B2930] text-sm font-medium text-[#E6E1E5] hover:bg-[#48464C] transition-all duration-300 hover:scale-[1.02] active:scale-95 elevation-1 overflow-hidden"
                 data-ripple
               >
-                <img src="/google.svg" alt="Google" className="h-5 w-5" />
+                <Image
+                  src="/google.svg"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                  className="h-5 w-5"
+                />
                 <span className="ml-2">Google</span>
                 <Ripple />
               </button>

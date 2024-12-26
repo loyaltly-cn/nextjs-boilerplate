@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../../auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { put } from '@vercel/blob'
 
@@ -23,14 +23,13 @@ export async function POST(req: Request) {
       addRandomSuffix: true,
     })
 
-    // 更新数据库中的用户头像
     await prisma.user.update({
       where: { email: session.user.email },
       data: { image: blob.url },
     })
 
     return NextResponse.json({ avatarUrl: blob.url })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error uploading avatar:', error)
     return new NextResponse('Error uploading avatar', { status: 500 })
   }

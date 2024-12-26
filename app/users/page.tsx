@@ -118,10 +118,9 @@ export default function Users() {
               <button
                 onClick={() => router.push('/register')}
                 className="mt-8 relative inline-flex items-center px-6 py-3 rounded-full text-sm font-medium text-[#381E72] bg-[#D0BCFF] hover:bg-[#E8DEF8] transition-all duration-300 hover:scale-[1.02] active:scale-95 overflow-hidden"
-                data-ripple
               >
                 Create User
-                <Ripple color="rgba(56, 30, 114, 0.15)" />
+                <Ripple />
               </button>
             </div>
           </div>

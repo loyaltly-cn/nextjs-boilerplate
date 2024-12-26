@@ -1,26 +1,39 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from './ripple.module.css'
 
-interface RippleStyle {
-  left: number
-  top: number
-  size: number
+interface RippleProps {
+  color?: string;
 }
 
-export function Ripple() {
-  const [ripples, setRipples] = useState<RippleStyle[]>([])
+export function Ripple({ color = 'rgba(255, 255, 255, 0.4)' }: RippleProps) {
+  const [ripples, setRipples] = useState<Array<{ x: number; y: number }>>([])
+
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    
+    setRipples(prev => [...prev, { x, y }])
+    setTimeout(() => {
+      setRipples(prev => prev.slice(1))
+    }, 850)
+  }
 
   return (
-    <>
-      {ripples.map((style, i) => (
+    <div className={styles.rippleContainer} onClick={handleClick}>
+      {ripples.map((pos, i) => (
         <span
           key={i}
-          className={`${styles.ripple} absolute`}
-          style={{transform: `translate(${style.left}px, ${style.top}px)`}}
+          className={styles.ripple}
+          style={{ 
+            left: `${pos.x}px`,
+            top: `${pos.y}px`,
+            backgroundColor: color
+          }}
         />
       ))}
-    </>
+    </div>
   )
 } 

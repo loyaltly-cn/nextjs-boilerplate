@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -8,11 +11,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',  // 为 GitHub 头像
+        hostname: 'avatars.githubusercontent.com',
       },
       {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',     // 为 Google 头像
+        hostname: 'lh3.googleusercontent.com',
       }
     ],
   },

@@ -9,6 +9,8 @@ interface Toast {
   type: 'info' | 'success' | 'warning' | 'error'
 }
 
+type ToastListener = (toasts: Toast[]) => void
+
 const icons = {
   info: (
     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -41,7 +43,7 @@ const colors = {
 
 let toastId = 0
 const toasts: Toast[] = []
-let listeners: ((toasts: Toast[]) => void)[] = []
+const listeners: ToastListener[] = []
 
 function emit() {
   listeners.forEach(listener => listener([...toasts]))
@@ -74,7 +76,10 @@ export function ToastContainer() {
     
     listeners.push(handleToasts)
     return () => {
-      listeners = listeners.filter(listener => listener !== handleToasts)
+      const index = listeners.indexOf(handleToasts)
+      if (index > -1) {
+        listeners.splice(index, 1)
+      }
     }
   }, [])
 

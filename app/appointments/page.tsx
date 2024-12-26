@@ -16,7 +16,7 @@ interface Appointment {
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [loading, setLoading] = useState(true)
-  const { data: session } = useSession()
+  const { data: _ } = useSession()
   const router = useRouter()
 
   useEffect(() => {

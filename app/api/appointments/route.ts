@@ -10,7 +10,7 @@ export async function GET() {
     })
 
     return NextResponse.json(appointments)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Failed to fetch appointments:', error)
     return NextResponse.json(
       { error: 'Failed to fetch appointments' },

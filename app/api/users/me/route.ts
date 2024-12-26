@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 export const GET = async () => {
@@ -25,7 +25,7 @@ export const GET = async () => {
     }
 
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching user:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

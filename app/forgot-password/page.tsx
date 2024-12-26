@@ -57,7 +57,7 @@ export default function ForgotPassword() {
                   </h3>
                   <div className="mt-2 text-sm text-[#A6F4C5]">
                     <p>
-                      Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.
+                      Check your email for a link to reset your password. If it doesn&apos;t appear within a few minutes, check your spam folder.
                     </p>
                   </div>
                   <div className="mt-4">
