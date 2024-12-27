@@ -1,45 +1,34 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { ToastContainer } from '@/components/ui/toast'
-import { ChatLayout } from '@/components/ui/chat-layout'
-import { PageTransition } from '@/components/ui/page-transition'
+import { DashboardLayout } from '@/components/ui/dashboard-layout'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geist = Geist({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+})
 
 export const metadata: Metadata = {
-  title: "Appointment System",
-  description: "A modern appointment booking system built with Next.js",
-};
+  title: "Admin Dashboard",
+  description: "A modern admin dashboard built with Next.js",
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={geist.className}>
         <AuthProvider>
-          <ChatLayout>
-            <PageTransition>
-              {children}
-            </PageTransition>
-          </ChatLayout>
+          <DashboardLayout>
+            {children}
+          </DashboardLayout>
           <ToastContainer />
         </AuthProvider>
       </body>
     </html>
-  );
+  )
 }
