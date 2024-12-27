@@ -2,7 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/prisma'
-import { compare } from 'bcryptjs'
+import { md5 } from '@/lib/utils'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -33,13 +33,14 @@ export const authOptions: NextAuthOptions = {
         })
 
         if (!user) {
-          throw new Error('Invalid credentials')
+          throw new Error('Email not found')
         }
 
-        const isValid = await compare(credentials.password, user.password)
+        const isValid = md5(credentials.password) === user.password
+        console.log('Password valid:', isValid)
 
         if (!isValid) {
-          throw new Error('Invalid credentials')
+          throw new Error('Invalid password')
         }
 
         return {

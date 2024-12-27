@@ -74,7 +74,7 @@ export default function LoginPage() {
                   aria-label="Email"
                   placeholder="Enter your email"
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full px-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
+                  className="w-full pl-10 pr-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
                   required
                 />
                 <svg className="w-5 h-5 text-[#CAC4D0] absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
