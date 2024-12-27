@@ -27,11 +27,17 @@ export function AppointmentForm() {
     e.preventDefault()
     setIsLoading(true)
 
+    const appointmentTime = `${formData.date}T${formData.time}:00.000Z`
+
     try {
-      const response = await fetch('/api/appointments', {
+      const response = await fetch('/server/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          appointmentTime
+        })
       })
 
       const data = await response.json()

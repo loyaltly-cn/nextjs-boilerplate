@@ -3,137 +3,104 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Ripple } from '@/components/ui/ripple'
 import { toast } from '@/components/ui/toast'
-import { md5 } from '@/lib/utils'
 
-const fadeIn = "animate-[fadeIn_0.3s_ease-in-out]"
-const slideUp = "animate-[slideUp_0.3s_ease-out]"
-
-export default function Register() {
+export default function RegisterPage() {
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  })
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const name = formData.get('name') as string
+    setLoading(true)
 
     try {
-      const res = await fetch('/api/register', {
+      const res = await fetch('/server/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email, 
-          password: md5(password),
-          name 
-        }),
+        body: JSON.stringify(formData)
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || 'Failed to register')
+        throw new Error(data.error)
       }
 
-      toast('Registration successful', 'success')
       router.push('/login')
+      toast('Registration successful! Please login.', 'success')
     } catch (error) {
       toast(
         error instanceof Error ? error.message : 'Failed to register',
         'error'
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className={`min-h-screen bg-[#1C1B1F] flex flex-col justify-center py-12 sm:px-6 lg:px-8 ${fadeIn}`}>
-      <div className={`sm:mx-auto sm:w-full sm:max-w-md ${slideUp}`}>
-        <h2 className="mt-6 text-center text-3xl font-normal text-[#E6E1E5] animate-[fadeIn_0.5s_ease-in-out]">
-          Create your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-[#CAC4D0] animate-[fadeIn_0.5s_ease-in-out_0.1s]">
-          Sign up to get started
-        </p>
-      </div>
-
-      <div className={`mt-8 sm:mx-auto sm:w-full sm:max-w-md ${slideUp} animate-[fadeIn_0.5s_ease-in-out_0.2s]`}>
-        <div className="bg-[#2B2930] py-8 px-4 shadow-lg sm:rounded-3xl sm:px-10 transition-all duration-300 hover:shadow-xl">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-[#601410] text-[#F2B8B5] px-4 py-3 rounded-lg" role="alert">
-                <span className="block sm:inline">{error}</span>
-              </div>
-            )}
-
+    <div className="min-h-screen bg-[#1C1B1F] flex items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="bg-[#2B2930] rounded-3xl p-8 shadow-xl border border-[#48464C]/30">
+          <h2 className="text-2xl font-semibold text-[#E6E1E5] mb-6">Register</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#E6E1E5]">
-                Full name
+              <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+                Name
               </label>
-              <div className="mt-1">
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  className="appearance-none block w-full px-4 py-3 border-0 rounded-xl text-[#E6E1E5] bg-[#48464C] placeholder-[#CAC4D0] focus:outline-none focus:ring-2 focus:ring-[#D0BCFF] transition-all duration-300 hover:bg-[#4A484E] focus:scale-[1.02]"
-                  placeholder="Enter your name"
-                />
-              </div>
+              <input
+                type="text"
+                value={formData.name}
+                aria-label="Name"
+                placeholder="Enter your name"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
+              />
             </div>
-
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#E6E1E5]">
-                Email address
+              <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+                Email
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="appearance-none block w-full px-4 py-3 border-0 rounded-xl text-[#E6E1E5] bg-[#48464C] placeholder-[#CAC4D0] focus:outline-none focus:ring-2 focus:ring-[#D0BCFF] transition-all duration-300 hover:bg-[#4A484E] focus:scale-[1.02]"
-                  placeholder="Enter your email"
-                />
-              </div>
+              <input
+                type="email"
+                value={formData.email}
+                aria-label="Email"
+                placeholder="Enter your email"
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                className="w-full px-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
+                required
+              />
             </div>
-
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#E6E1E5]">
+              <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
                 Password
               </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className="appearance-none block w-full px-4 py-3 border-0 rounded-xl text-[#E6E1E5] bg-[#48464C] placeholder-[#CAC4D0] focus:outline-none focus:ring-2 focus:ring-[#D0BCFF] transition-all duration-300 hover:bg-[#4A484E] focus:scale-[1.02]"
-                  placeholder="Create a password"
-                />
-              </div>
+              <input
+                type="password"
+                value={formData.password}
+                aria-label="Password"
+                onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                className="w-full px-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
+                required
+              />
             </div>
-
-            <div>
-              <button
-                type="submit"
-                className="relative w-full flex justify-center py-3 px-4 rounded-full text-sm font-medium text-[#381E72] bg-[#D0BCFF] hover:bg-[#E8DEF8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1B1F] focus:ring-[#D0BCFF] transition-all duration-300 hover:scale-[1.02] active:scale-95 elevation-2 overflow-hidden"
-                data-ripple
-              >
-                Sign up
-                <Ripple color="rgba(56, 30, 114, 0.15)" />
-              </button>
-            </div>
-          </form>
-
-          <p className="mt-8 text-center text-sm text-[#CAC4D0]">
-            Already have an account?{' '}
-            <Link
-              href="/login"
-              className="font-medium text-[#D0BCFF] hover:text-[#E8DEF8] transition-colors duration-200"
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full px-4 py-2 bg-[#D0BCFF] text-[#381E72] rounded-xl font-medium hover:bg-[#E8DEF8] transition-colors disabled:opacity-50"
             >
-              Sign in instead
+              {loading ? 'Loading...' : 'Register'}
+            </button>
+          </form>
+          <p className="mt-4 text-center text-[#CAC4D0]">
+            Already have an account?{' '}
+            <Link href="/login" className="text-[#D0BCFF] hover:text-[#E8DEF8]">
+              Login
             </Link>
           </p>
         </div>

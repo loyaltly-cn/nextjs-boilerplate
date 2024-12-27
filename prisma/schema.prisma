@@ -15,10 +15,13 @@ model User {
   password      String    // 存储 MD5 加密后的密码
   emailVerified DateTime?
   image         String?
+  isAdmin       Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  chats         Chat[]
+  aboutVideos   AboutVideo[]
 }
 
 model Account {
@@ -73,4 +76,72 @@ model Appointment {
   appointmentTime DateTime
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Chat {
+  id        String    @id @default(cuid())
+  userId    String?   // 可选,因为可能是未登录用户
+  userName  String    // 用户名称
+  status    ChatStatus @default(OPEN)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+
+  user      User?     @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  role      Role     @default(USER)
+  chatId    String
+  createdAt DateTime @default(now())
+  
+  chat      Chat     @relation(fields: [chatId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ChatStatus {
+  OPEN
+  CLOSED
+}
+
+model AboutItem {
+  id          String   @id @default(cuid())
+  imageUrl    String   // 存储在 Vercel Blob 中的图片 URL
+  title       String
+  description String
+  content     String   @db.Text
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutVideo {
+  id        String   @id @default(cuid())
+  url       String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("about_videos")
+}
+
+model View {
+  id          String   @id @default(cuid())
+  title       String
+  desc        String
+  background  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+
+  @@map("views")
 } 
