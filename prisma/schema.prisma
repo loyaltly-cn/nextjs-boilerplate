@@ -22,6 +22,12 @@ model User {
   sessions      Session[]
   chats         Chat[]
   aboutVideos   AboutVideo[]
+  phoneNumber   String?
+  dateOfBirth   DateTime?
+  city          String?
+  country       String?
+  postalCode    String?
+  address       String?
 }
 
 model Account {

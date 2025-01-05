@@ -48,3 +48,21 @@ export interface View {
     createdAt: string,
     updatedAt: string
 }
+
+export interface User {
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  address?: string;
+}
+
+export interface CreateUserInput {
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  address?: string;
+}

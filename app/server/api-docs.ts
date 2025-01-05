@@ -248,6 +248,31 @@ export const apiSpec = {
                     type: 'string',
                     format: 'password',
                     description: '密码'
+                  },
+                  phoneNumber: {
+                    type: 'string',
+                    description: '手机号码（可选）'
+                  },
+                  dateOfBirth: {
+                    type: 'string',
+                    format: 'date',
+                    description: '出生日期（可选）'
+                  },
+                  city: {
+                    type: 'string',
+                    description: '城市（可选）'
+                  },
+                  country: {
+                    type: 'string',
+                    description: '国家（可选）'
+                  },
+                  postalCode: {
+                    type: 'string',
+                    description: '邮政编码（可选）'
+                  },
+                  address: {
+                    type: 'string',
+                    description: '详细地址（可选）'
                   }
                 },
                 required: ['email', 'password']
