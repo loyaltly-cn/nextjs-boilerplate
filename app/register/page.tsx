@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from '@/components/ui/toast'
+import { md5 } from '@/lib/utils'
 
 export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    password: ''
+    password: '',
+    name: ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,23 +20,28 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/server/api/users', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          password: md5(formData.password), // 使用 md5 加密密码
+        }),
       })
 
-      const data = await res.json()
+      const data = await response.json()
 
-      if (!res.ok) {
-        throw new Error(data.error)
+      if (data.code !== 200) {
+        throw new Error(data.message)
       }
 
       router.push('/login')
-      toast('Registration successful! Please login.', 'success')
+      toast('注册成功，请登录', 'success')
     } catch (error) {
       toast(
-        error instanceof Error ? error.message : 'Failed to register',
+        error instanceof Error ? error.message : '注册失败',
         'error'
       )
     } finally {

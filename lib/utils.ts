@@ -1,5 +1,8 @@
-import CryptoJS from 'crypto-js'
+import crypto from 'crypto'
 
-export function md5(text: string): string {
-  return CryptoJS.MD5(text).toString()
+export function md5(str: string): string {
+  return crypto
+    .createHash('md5')
+    .update(str)
+    .digest('hex')
 } 

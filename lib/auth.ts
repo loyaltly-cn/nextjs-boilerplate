@@ -2,7 +2,6 @@ import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/prisma'
-import { md5 } from '@/lib/utils'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -33,21 +32,17 @@ export const authOptions: NextAuthOptions = {
         })
 
         if (!user) {
-          throw new Error('Email not found')
+          throw new Error('邮箱或密码错误')
         }
 
-        const isValid = md5(credentials.password) === user.password
-        console.log('Password valid:', isValid)
-
-        if (!isValid) {
-          throw new Error('Invalid password')
+        if (credentials.password !== user.password) {
+          throw new Error('邮箱或密码错误')
         }
 
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          image: user.image,
           isAdmin: user.isAdmin
         }
       }
@@ -59,42 +54,18 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id
         token.email = user.email
         token.name = user.name
-        token.picture = user.image
         token.isAdmin = user.isAdmin
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string
-        session.user.email = token.email as string
-        session.user.name = token.name as string
-        session.user.image = token.picture as string
-        session.user.isAdmin = token.isAdmin as boolean
+        session.user.id = token.id
+        session.user.email = token.email
+        session.user.name = token.name
+        session.user.isAdmin = token.isAdmin
       }
       return session
     }
-  }
-}
-
-declare module 'next-auth' {
-  interface User {
-    isAdmin: boolean
-  }
-  
-  interface Session {
-    user: {
-      id: string
-      email: string
-      name: string
-      image: string
-      isAdmin: boolean
-    }
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    isAdmin: boolean
   }
 } 

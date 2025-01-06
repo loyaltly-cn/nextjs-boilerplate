@@ -1,19 +1,37 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const { data: session } = useSession()
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
 
+  useEffect(() => {
+    if (status === 'unauthenticated' && pathname !== '/login' && pathname !== '/register') {
+      router.push('/login')
+    }
+  }, [status, pathname, router])
+
+  // 如果是登录或注册页面，只显示内容
+  if (pathname === '/login' || pathname === '/register') {
+    return <>{children}</>
+  }
+
+  // 如果正在检查登录状态，可以显示加载状态
+  if (status === 'loading') {
+    return null // 或者显示加载动画
+  }
+
+  // 如果未登录，不显示任何内容（会被 useEffect 重定向）
   if (!session) {
-    return children
+    return null
   }
 
   const navigation = [
@@ -151,7 +169,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               <div className="flex items-center">
                 <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-[#D0BCFF]">
                   <img
-                    src={session.user?.image || '/default-avatar.png'}
+                    src="/default-avatar.png"
                     alt="Avatar"
                     className="object-cover w-full h-full"
                   />

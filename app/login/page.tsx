@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from '@/components/ui/toast'
+import { md5 } from '@/lib/utils'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -21,7 +22,7 @@ export default function LoginPage() {
     try {
       const result = await signIn('credentials', {
         email: formData.email,
-        password: formData.password,
+        password: md5(formData.password),
         redirect: false
       })
 
@@ -29,11 +30,12 @@ export default function LoginPage() {
         throw new Error(result.error)
       }
 
-      router.push('/users')
+      toast('登录成功', 'success')
+      router.push('/')
       router.refresh()
     } catch (error) {
       toast(
-        error instanceof Error ? error.message : 'Failed to login',
+        error instanceof Error ? error.message : '登录失败',
         'error'
       )
     } finally {

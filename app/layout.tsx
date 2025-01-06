@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { ToastContainer } from '@/components/ui/toast'
 import { DashboardLayout } from '@/components/ui/dashboard-layout'
+import { AuthGuard } from '@/components/auth/auth-guard'
 
 const geist = Geist({
   subsets: ["latin"],
@@ -23,9 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={geist.className}>
         <AuthProvider>
-          <DashboardLayout>
-            {children}
-          </DashboardLayout>
+          <AuthGuard>
+            <DashboardLayout>
+              {children}
+            </DashboardLayout>
+          </AuthGuard>
           <ToastContainer />
         </AuthProvider>
       </body>

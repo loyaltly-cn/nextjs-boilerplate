@@ -223,7 +223,7 @@ export const apiSpec = {
         }
       }
     },
-    '/server/api/auth/register': {
+    '/api/auth/register': {
       post: {
         summary: '用户注册',
         description: '创建新用户账号',
@@ -324,7 +324,7 @@ export const apiSpec = {
         }
       }
     },
-    '/server/api/auth/login': {
+    '/api/auth/login': {
       post: {
         summary: '用户登录',
         description: '使用邮箱和密码登录',

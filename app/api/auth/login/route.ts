@@ -12,14 +12,14 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({
         code: 404,
-        message: '用户不存在'
+        message: '邮箱或密码错误'
       })
     }
 
     if (password !== user.password) {
       return NextResponse.json({
         code: 401,
-        message: '密码错误'
+        message: '邮箱或密码错误'
       })
     }
 
