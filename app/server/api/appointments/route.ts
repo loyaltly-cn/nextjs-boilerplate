@@ -4,16 +4,15 @@ import { prisma } from '@/lib/prisma'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { name, phone, appointmentTime } = body
+    const { userId, appointmentTime } = body
 
-    if (!name || !phone || !appointmentTime) {
+    if (!userId || !appointmentTime) {
       return new NextResponse('Missing required fields', { status: 400 })
     }
 
     const appointment = await prisma.appointment.create({
       data: {
-        name,
-        phone,
+        userId,
         appointmentTime: new Date(appointmentTime)
       }
     })
@@ -30,9 +29,13 @@ export async function GET() {
     const appointments = await prisma.appointment.findMany({
       orderBy: {
         appointmentTime: 'desc'
+      },
+      include: {
+        user: true // 确保包含用户信息
       }
     })
 
+    console.log(NextResponse.json({ appointments }))
     return NextResponse.json({ appointments })
   } catch (error) {
     console.error('Failed to fetch appointments:', error)

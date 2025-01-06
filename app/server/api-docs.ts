@@ -1379,6 +1379,169 @@ export const apiSpec = {
         tags: ['View'],
         security: [{ BearerAuth: [] }]
       }
+    },
+    '/api/surrogacy-applications': {
+      post: {
+        summary: '创建代孕申请',
+        description: '创建新的代孕申请记录',
+        tags: ['Surrogacy'],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  userId: { type: 'string', description: '用户ID' },
+                  name: { type: 'string', description: '姓名' },
+                  address: { type: 'string', description: '地址' },
+                  city: { type: 'string', description: '城市' },
+                  state: { type: 'string', description: '州/省' },
+                  postalCode: { type: 'string', description: '邮编' },
+                  country: { type: 'string', description: '国家' },
+                  phone: { type: 'string', description: '电话' },
+                  email: { type: 'string', description: '邮箱' },
+                  dateOfBirth: { type: 'string', format: 'date', description: '出生日期' },
+                  partnerName: { type: 'string', description: '伴侣姓名' },
+                  partnerDateOfBirth: { type: 'string', format: 'date', description: '伴侣出生日期' },
+                  answers: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', description: '选项ID' },
+                        value: { type: 'string', description: '选择的值' }
+                      }
+                    }
+                  }
+                },
+                required: ['userId', 'answers']
+              }
+            }
+          }
+        },
+        responses: {
+          '200': {
+            description: '创建成功',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/SurrogacyApplication'
+                }
+              }
+            }
+          }
+        }
+      },
+      get: {
+        summary: '获取代孕申请列表',
+        description: '获取所有代孕申请记录',
+        tags: ['Surrogacy'],
+        parameters: [
+          {
+            name: 'userId',
+            in: 'query',
+            description: '筛选指定用户的申请',
+            required: false,
+            schema: { type: 'string' }
+          }
+        ],
+        responses: {
+          '200': {
+            description: '获取成功',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/SurrogacyApplication'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/api/surrogacy-applications/{id}': {
+      get: {
+        summary: '获取代孕申请详情',
+        description: '获取指定代孕申请的详细信息',
+        tags: ['Surrogacy'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' }
+          }
+        ],
+        responses: {
+          '200': {
+            description: '获取成功',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/SurrogacyApplication'
+                }
+              }
+            }
+          }
+        }
+      },
+      put: {
+        summary: '更新代孕申请',
+        description: '更新指定代孕申请的信息',
+        tags: ['Surrogacy'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' }
+          }
+        ],
+        responses: {
+          '200': {
+            description: '更新成功',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/SurrogacyApplication'
+                }
+              }
+            }
+          }
+        }
+      },
+      delete: {
+        summary: '删除代孕申请',
+        description: '删除指定的代孕申请记录',
+        tags: ['Surrogacy'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' }
+          }
+        ],
+        responses: {
+          '200': {
+            description: '删除成功',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: { type: 'boolean', example: true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   components: {
@@ -1621,6 +1784,36 @@ export const apiSpec = {
             format: 'date-time',
             description: '更新时间'
           }
+        }
+      },
+      SurrogacyApplication: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', description: '申请ID' },
+          userId: { type: 'string', description: '用户ID' },
+          name: { type: 'string', description: '姓名' },
+          address: { type: 'string', description: '地址' },
+          city: { type: 'string', description: '城市' },
+          state: { type: 'string', description: '州/省' },
+          postalCode: { type: 'string', description: '邮编' },
+          country: { type: 'string', description: '国家' },
+          phone: { type: 'string', description: '电话' },
+          email: { type: 'string', description: '邮箱' },
+          dateOfBirth: { type: 'string', format: 'date', description: '出生日期' },
+          partnerName: { type: 'string', description: '伴侣姓名' },
+          partnerDateOfBirth: { type: 'string', format: 'date', description: '伴侣出生日期' },
+          answers: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', description: '选项ID' },
+                value: { type: 'string', description: '选择的值' }
+              }
+            }
+          },
+          createdAt: { type: 'string', format: 'date-time', description: '创建时间' },
+          updatedAt: { type: 'string', format: 'date-time', description: '更新时间' }
         }
       }
     }

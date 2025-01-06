@@ -9,9 +9,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt'
   },
   pages: {
-    signIn: '/login',
-    signOut: '/login',
-    error: '/login'
+    signIn: '/login'
   },
   providers: [
     CredentialsProvider({
@@ -22,21 +20,15 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Missing credentials')
+          return null
         }
 
         const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          }
+          where: { email: credentials.email }
         })
 
-        if (!user) {
-          throw new Error('邮箱或密码错误')
-        }
-
-        if (credentials.password !== user.password) {
-          throw new Error('邮箱或密码错误')
+        if (!user || user.password !== credentials.password) {
+          return null
         }
 
         return {
@@ -66,6 +58,17 @@ export const authOptions: NextAuthOptions = {
         session.user.isAdmin = token.isAdmin
       }
       return session
+    }
+  },
+  cookies: {
+    sessionToken: {
+      name: 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: false
+      }
     }
   }
 } 

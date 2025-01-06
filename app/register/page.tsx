@@ -22,13 +22,12 @@ export default function RegisterPage() {
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          password: md5(formData.password), // 使用 md5 加密密码
-        }),
+          email: formData.email,
+          password: formData.password,
+          name: formData.name
+        })
       })
 
       const data = await response.json()

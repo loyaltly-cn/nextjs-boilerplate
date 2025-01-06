@@ -27,12 +27,14 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
+        if (result.error === 'CredentialsSignin') {
+          throw new Error('邮箱或密码错误')
+        }
         throw new Error(result.error)
       }
 
-      toast('登录成功', 'success')
       router.push('/')
-      router.refresh()
+      toast('登录成功', 'success')
     } catch (error) {
       toast(
         error instanceof Error ? error.message : '登录失败',

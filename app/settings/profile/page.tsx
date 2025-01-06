@@ -1,118 +1,181 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { AvatarUpload } from '@/components/ui/avatar-upload'
 import { toast } from '@/components/ui/toast'
-import { Navbar } from '@/components/ui/navbar'
+import { DateTimePicker } from '@/components/ui/datetime-picker'
 
-export default function ProfileSettings() {
-  const { data: session, update: updateSession } = useSession()
-  const [name, setName] = useState(session?.user?.name || '')
-  const [isLoading, setIsLoading] = useState(false)
+export default function ProfilePage() {
+  const { data: session } = useSession()
+  const [loading, setLoading] = useState(false)
+  const [profile, setProfile] = useState({
+    name: '',
+    phoneNumber: '',
+    dateOfBirth: '',
+    address: '',
+    city: '',
+    country: '',
+    postalCode: ''
+  })
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!name.trim()) {
-      toast('Name is required', 'error')
-      return
+  useEffect(() => {
+    if (session?.user) {
+      // 获取用户详细信息
+      fetch(`/api/users/${session.user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === 200) {
+            setProfile({
+              name: data.data.name || '',
+              phoneNumber: data.data.phoneNumber || '',
+              dateOfBirth: data.data.dateOfBirth ? new Date(data.data.dateOfBirth).toISOString().split('T')[0] : '',
+              address: data.data.address || '',
+              city: data.data.city || '',
+              country: data.data.country || '',
+              postalCode: data.data.postalCode || ''
+            })
+          }
+        })
     }
+  }, [session])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
 
     try {
-      setIsLoading(true)
-      const res = await fetch('/api/users/profile', {
-        method: 'PATCH',
+      const res = await fetch(`/api/users/${session?.user.id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify(profile)
       })
 
-      if (!res.ok) throw new Error()
-
-      await updateSession({
-        ...session,
-        user: {
-          ...session?.user,
-          name
-        }
-      })
-
-      toast('Profile updated successfully', 'success')
+      const data = await res.json()
+      if (data.code === 200) {
+        toast('Profile updated successfully', 'success')
+      } else {
+        toast(data.message || 'Failed to update profile', 'error')
+      }
     } catch (error) {
       toast('Failed to update profile', 'error')
     } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleAvatarUpload = async (file: File) => {
-    const formData = new FormData()
-    formData.append('avatar', file)
-
-    try {
-      const res = await fetch('/api/users/avatar', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!res.ok) throw new Error()
-
-      const data = await res.json()
-      
-      await updateSession({
-        ...session,
-        user: {
-          ...session?.user,
-          image: data.avatarUrl
-        }
-      })
-
-      toast('Avatar updated successfully', 'success')
-    } catch (error) {
-      toast('Failed to update avatar', 'error')
+      setLoading(false)
     }
   }
 
   return (
-    <main className="min-h-screen bg-[#1C1B1F]">
-      <Navbar />
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold text-[#E6E1E5] mb-8">Profile Settings</h1>
       
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
-        <div className="bg-[#2B2930] rounded-3xl p-8">
-          <h1 className="text-2xl font-bold text-[#E6E1E5] mb-8">Profile Settings</h1>
-          
-          <div className="mb-8">
-            <AvatarUpload
-              currentAvatar={session?.user?.image}
-              email={session?.user?.email}
-              onUpload={handleAvatarUpload}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              value={profile.name}
+              onChange={e => setProfile(prev => ({ ...prev, name: e.target.value }))}
+              className="w-full px-4 py-2 bg-[#2B2930] border border-[#48464C]/30 rounded-lg text-[#E6E1E5] focus:outline-none focus:border-[#D0BCFF]"
+              placeholder="Enter your name"
+              aria-label="Name"
             />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#E6E1E5]">
-                Display Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-4 py-3 rounded-xl text-[#E6E1E5] bg-[#48464C] border-0 focus:ring-2 focus:ring-[#D0BCFF] transition-all duration-200"
-                placeholder="Enter your name"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              value={profile.phoneNumber}
+              onChange={e => setProfile(prev => ({ ...prev, phoneNumber: e.target.value }))}
+              className="w-full px-4 py-2 bg-[#2B2930] border border-[#48464C]/30 rounded-lg text-[#E6E1E5] focus:outline-none focus:border-[#D0BCFF]"
+              placeholder="Enter your phone number"
+              aria-label="Phone Number"
+            />
+          </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full flex justify-center py-3 px-4 rounded-full text-sm font-medium text-[#381E72] bg-[#D0BCFF] hover:bg-[#E8DEF8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1B1F] focus:ring-[#D0BCFF] transition-all duration-300 hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {isLoading ? 'Saving...' : 'Save Changes'}
-            </button>
-          </form>
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              Date of Birth
+            </label>
+            <DateTimePicker
+              value={profile.dateOfBirth}
+              onChange={(date) => setProfile(prev => ({ ...prev, dateOfBirth: date }))}
+              type="date"
+              className="w-full px-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              Address
+            </label>
+            <input
+              type="text"
+              value={profile.address}
+              onChange={e => setProfile(prev => ({ ...prev, address: e.target.value }))}
+              className="w-full px-4 py-2 bg-[#2B2930] border border-[#48464C]/30 rounded-lg text-[#E6E1E5] focus:outline-none focus:border-[#D0BCFF]"
+              placeholder="Enter your address"
+              aria-label="Address"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              City
+            </label>
+            <input
+              type="text"
+              value={profile.city}
+              onChange={e => setProfile(prev => ({ ...prev, city: e.target.value }))}
+              className="w-full px-4 py-2 bg-[#2B2930] border border-[#48464C]/30 rounded-lg text-[#E6E1E5] focus:outline-none focus:border-[#D0BCFF]"
+              placeholder="Enter your city"
+              aria-label="City"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              Country
+            </label>
+            <input
+              type="text"
+              value={profile.country}
+              onChange={e => setProfile(prev => ({ ...prev, country: e.target.value }))}
+              className="w-full px-4 py-2 bg-[#2B2930] border border-[#48464C]/30 rounded-lg text-[#E6E1E5] focus:outline-none focus:border-[#D0BCFF]"
+              placeholder="Enter your country"
+              aria-label="Country"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
+              Postal Code
+            </label>
+            <input
+              type="text"
+              value={profile.postalCode}
+              onChange={e => setProfile(prev => ({ ...prev, postalCode: e.target.value }))}
+              className="w-full px-4 py-2 bg-[#2B2930] border border-[#48464C]/30 rounded-lg text-[#E6E1E5] focus:outline-none focus:border-[#D0BCFF]"
+              placeholder="Enter your postal code"
+              aria-label="Postal Code"
+            />
+          </div>
         </div>
-      </div>
-    </main>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-2.5 bg-[#D0BCFF] hover:bg-[#E8DEF8] text-[#381E72] rounded-full font-medium transition-colors disabled:opacity-50"
+          >
+            {loading ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </form>
+    </div>
   )
 } 
