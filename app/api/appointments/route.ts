@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { uid, date } = body
+    const { uid, date ,type} = body
 
     if (!uid || !date) {
       return new NextResponse(
@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     const appointment = await prisma.appointment.create({
       data: {
         userId: uid,
+        type,
         appointmentTime: new Date(date)
       }
     })

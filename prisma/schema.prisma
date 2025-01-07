@@ -29,6 +29,7 @@ model User {
   address               String?
   appointments          Appointment[]
   surrogacyApplications SurrogacyApplication[]
+  surrogateMotherApplications SurrogateMotherApplication[]
 }
 
 model Account {
@@ -80,6 +81,7 @@ model Appointment {
   id              String   @id @default(cuid())
   userId          String
   appointmentTime DateTime
+  type            String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -201,4 +203,28 @@ model SurrogacyOption {
   updatedAt DateTime @updatedAt
 
   @@map("surrogacy_options")
+}
+
+model SurrogateMotherApplication {
+  id             String   @id @default(cuid())
+  name           String
+  age            Int
+  birthDate      DateTime
+  height         Float
+  weight         Float
+  ethnicity      String
+  education      String
+  maritalStatus  String
+  hasChildren    Boolean
+  address        String
+  city           String
+  state          String
+  postalCode     String
+  country        String
+  phoneNumber    String
+  email          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
 }

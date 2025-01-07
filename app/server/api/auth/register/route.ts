@@ -4,7 +4,7 @@ import { md5 } from '@/lib/utils'
 
 export async function POST(request: Request) {
   try {
-    const { email, password, name } = await request.json()
+    const { email, password, name ,phoneNumber,dateOfBirth,city,country,postalCode,address } = await request.json()
 
     if (!email || !password) {
       return NextResponse.json({
@@ -27,8 +27,14 @@ export async function POST(request: Request) {
     const user = await prisma.user.create({
       data: {
         email,
-        password: md5(password),
-        name: name || email.split('@')[0]
+        password:md5(password),
+        name,
+        phoneNumber,
+        dateOfBirth: new Date(dateOfBirth),
+        city,
+        country,
+        postalCode,
+        address
       }
     })
 
