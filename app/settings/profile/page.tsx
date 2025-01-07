@@ -24,44 +24,45 @@ export default function ProfilePage() {
       fetch(`/api/users/${session.user.id}`)
         .then(res => res.json())
         .then(data => {
-          if (data.code === 200) {
+          if (data) {
             setProfile({
-              name: data.data.name || '',
-              phoneNumber: data.data.phoneNumber || '',
-              dateOfBirth: data.data.dateOfBirth ? new Date(data.data.dateOfBirth).toISOString().split('T')[0] : '',
-              address: data.data.address || '',
-              city: data.data.city || '',
-              country: data.data.country || '',
-              postalCode: data.data.postalCode || ''
-            })
+              name: data.name || '',
+              phoneNumber: data.phoneNumber || '',
+              dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
+              address: data.address || '',
+              city: data.city || '',
+              country: data.country || '',
+              postalCode: data.postalCode || ''
+            });
           }
         })
+        .catch(() => toast('Failed to fetch profile', 'error'));
     }
-  }, [session])
+  }, [session]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await fetch(`/api/users/${session?.user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profile)
-      })
+      });
 
-      const data = await res.json()
-      if (data.code === 200) {
-        toast('Profile updated successfully', 'success')
+      const data = await res.json();
+      if (res.ok) {
+        toast('Profile updated successfully', 'success');
       } else {
-        toast(data.message || 'Failed to update profile', 'error')
+        toast(data.message || 'Failed to update profile', 'error');
       }
     } catch (error) {
-      toast('Failed to update profile', 'error')
+      toast('Failed to update profile', 'error');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="max-w-2xl mx-auto">
