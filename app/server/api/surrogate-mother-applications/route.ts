@@ -44,8 +44,6 @@ export async function POST(request: Request) {
       email: data.email
     };
 
-    console.log(applicationData); // 打印数据以调试
-
     const application = await prisma.surrogateMotherApplication.create({
       data: applicationData
     });

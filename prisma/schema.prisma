@@ -215,7 +215,7 @@ model SurrogateMotherApplication {
   ethnicity      String
   education      String
   maritalStatus  String
-  hasChildren    Boolean
+  hasChildren    String
   address        String
   city           String
   state          String
