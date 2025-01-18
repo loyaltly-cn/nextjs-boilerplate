@@ -5,6 +5,14 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import ChatRoom from './chat-room'
 
+interface Chat {
+  id: string;
+  userId: string | null;
+  userName: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export default async function Page({
   params,
 }: {

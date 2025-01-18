@@ -23,7 +23,7 @@ export interface Chat {
 export interface Message {
   id: string
   content: string
-  role: 'USER' | 'ADMIN'
+  role: 'USER' | 'ADMIN' | 'SURROGATE_MOTHER' | 'INTENDED_PARENT'
   chatId: string
   createdAt: Date
 }

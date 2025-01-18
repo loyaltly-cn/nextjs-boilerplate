@@ -30,6 +30,7 @@ model User {
   appointments          Appointment[]
   surrogacyApplications SurrogacyApplication[]
   surrogateMotherApplications SurrogateMotherApplication[]
+  role                  Role     @default(INTENDED_PARENT)
 }
 
 model Account {
@@ -115,6 +116,8 @@ model Message {
 enum Role {
   USER
   ADMIN
+  INTENDED_PARENT // 准父母
+  SURROGATE_MOTHER // 代孕母
 }
 
 enum ChatStatus {

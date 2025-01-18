@@ -141,6 +141,12 @@ export default function AppointmentsPage() {
                         <p className="text-[#E6E1E5]">{appointment.user.postalCode}</p>
                       </div>
                     )}
+                    {appointment.user.postalCode && (
+                      <div>
+                        <p className="text-[#CAC4D0] text-sm mb-1">type</p>
+                        {/* <p className="text-[#E6E1E5]">{appointment.type}</p> */}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

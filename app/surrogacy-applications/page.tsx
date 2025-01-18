@@ -9,6 +9,15 @@ interface Application {
   userId: string
   name: string | null
   email: string | null
+  address: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+  phone: string
+  dateOfBirth: string
+  partnerName: string
+  partnerDateOfBirth: string
   answers: Array<{
     id: string
     value: string
@@ -23,6 +32,7 @@ interface Application {
 export default function SurrogacyApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   useEffect(() => {
     fetchApplications()
@@ -30,7 +40,7 @@ export default function SurrogacyApplicationsPage() {
 
   const fetchApplications = async () => {
     try {
-      const res = await fetch('/api/surrogacy-applications')
+      const res = await fetch('/server/api/surrogacy-applications')
       const data = await res.json()
       if (data.code === 200) {
         setApplications(data.data)
@@ -40,6 +50,10 @@ export default function SurrogacyApplicationsPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id)
   }
 
   if (loading) {
@@ -74,13 +88,39 @@ export default function SurrogacyApplicationsPage() {
                     Submitted: {new Date(application.createdAt).toLocaleString()}
                   </p>
                 </div>
-                <a
-                  href={`/surrogacy-applications/${application.id}`}
+                <button
+                  onClick={() => toggleExpand(application.id)}
                   className="px-4 py-2 text-[#D0BCFF] hover:bg-[#48464C]/30 rounded-xl transition-colors"
                 >
-                  View Details
-                </a>
+                  {expandedId === application.id ? 'Hide Details' : 'View Details'}
+                </button>
               </div>
+              {expandedId === application.id && (
+                <div className="mt-4 text-[#CAC4D0]">
+                  <p>Email: {application.email}</p>
+                  <p>User ID: {application.userId}</p>
+                  <p>Address: {application.address}</p>
+                  <p>City: {application.city}</p>
+                  <p>State: {application.state}</p>
+                  <p>Postal Code: {application.postalCode}</p>
+                  <p>Country: {application.country}</p>
+                  <p>Phone: {application.phone}</p>
+                  <p>Date of Birth: {application.dateOfBirth}</p>
+                  <p>Partner Name: {application.partnerName}</p>
+                  <p>Partner Date of Birth: {application.partnerDateOfBirth}</p>
+                  <div>
+                    <p>Options:</p>
+                    <ul className="list-disc pl-5">
+                      {application.answers.map(answer => (
+                        <li key={answer.id}>
+                          <strong>{answer.id}:</strong> {answer.value}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {/* Add more fields as needed */}
+                </div>
+              )}
             </div>
           </div>
         ))}

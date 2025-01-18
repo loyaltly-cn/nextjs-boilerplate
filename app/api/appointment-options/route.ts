@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
 // 获取列表
 export async function GET() {
-  try {
+  try { 
     const appointmentOptions = await prisma.appointmentOption.findMany({
       orderBy: { createdAt: 'desc' }
     })

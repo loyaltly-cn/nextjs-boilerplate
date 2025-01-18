@@ -12,7 +12,8 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    name: ''
+    name: '',
+    role: 'USER'
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +27,8 @@ export default function RegisterPage() {
         body: JSON.stringify({
           email: formData.email,
           password: md5(formData.password),
-          name: formData.name
+          name: formData.name,
+          role: formData.role
         })
       })
 

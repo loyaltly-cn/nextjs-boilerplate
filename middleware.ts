@@ -26,10 +26,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * 匹配所有路径，包括根路径 /
-     * 但排除 api 路由和静态资源
-     */
     '/',
     '/((?!api|_next/static|server|_next/image|favicon.ico|login|register).*)'
   ]

@@ -4,7 +4,7 @@ import { md5 } from '@/lib/utils'
 
 export async function POST(request: Request) {
   try {
-    const { email, password, name ,phoneNumber,dateOfBirth,city,country,postalCode,address } = await request.json()
+    const { email, password, name ,phoneNumber,dateOfBirth,city,country,postalCode,address ,role} = await request.json()
 
     if (!email || !password) {
       return NextResponse.json({
@@ -34,7 +34,8 @@ export async function POST(request: Request) {
         city,
         country,
         postalCode,
-        address
+        address,
+        role
       }
     })
 
