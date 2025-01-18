@@ -26,12 +26,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       code: 200,
       message: '登录成功',
-      data: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        isAdmin: user.isAdmin
-      }
+      data: user
     })
 
   } catch (err) {
