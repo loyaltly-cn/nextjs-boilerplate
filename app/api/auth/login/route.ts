@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(request: Request) {
+  const { email, password } = await request.json()
   try {
-    const { email, password } = await request.json()
+    
 
     const user = await prisma.user.findUnique({
       where: { email }
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     console.error('Login error:', err)
     return NextResponse.json({
       code: 500,
-      message: '服务器错误'
+      message: err
     })
   }
 } 
