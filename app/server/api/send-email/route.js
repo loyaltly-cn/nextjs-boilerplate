@@ -13,8 +13,7 @@ export async function POST(request) {
   const { to, subject, text, html } = await   request.json();
   const code = generateCaptcha();
   try {
-    const captcha = generateCaptcha();
-    await sendEmail({ to, subject, text: captcha, html: captcha });
+    await sendEmail({ to, subject, text: '', html: code });
     return NextResponse.json({ success: true, message: 'Email sent successfully', code });
   } catch (error) {
     return NextResponse.json({ success: false, message: 'Failed to send email', error });
