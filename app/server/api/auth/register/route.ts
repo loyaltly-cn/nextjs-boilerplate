@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { md5 } from '@/lib/utils'
-
+import { sendEmail } from '@/lib/smtp'
 export async function POST(request: Request) {
   const body = await request.json()
   try {
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
       data: body
     })
 
+    await sendEmail({ to:user.email, subject: '注册验证码', text: '', html: '欢迎注册Sapling Surrogacy' });
     return NextResponse.json({
       code: 200,
       message: '注册成功',
