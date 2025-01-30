@@ -6,8 +6,10 @@ import { useSession, signOut } from 'next-auth/react'
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { useLanguage } from '@/app/language';
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { translations } = useLanguage();
   const pathname = usePathname()
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -104,18 +106,18 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div className="w-64 bg-[#2B2930] border-r border-[#48464C]/30 sticky top-0 h-screen">
         <div className="flex flex-col h-full">
           <div className="flex items-center h-16 px-6 border-b border-[#48464C]/30">
-            <span className="text-xl font-medium text-[#E6E1E5]">Admin Panel</span>
+            <span className="text-xl font-medium text-[#E6E1E5]">{translations.slider.name}</span>
           </div>
           
           <nav className="flex-1 px-4 py-4 space-y-1">
-            {filteredNavigation.map((item) => {
-              const isActive = pathname === item.href 
+            {translations.slider.options.map((item:any) => {
+              const isActive = pathname === item.link 
               
               return (
-                <div key={item.href}>
+                <div key={item.link}>
                    
                     <Link
-                      href={item.href}
+                      href={item.link}
                       className={`
                         flex items-center px-4 py-3 text-sm font-medium rounded-xl
                         transition-colors duration-200
@@ -125,8 +127,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                         }
                       `}
                     >
-                      <span className="mr-3">{item.icon}</span>
-                      {item.name}
+                      <span className="mr-3">{
+                        (
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.d} />
+                          </svg>
+                        )
+                        }</span>
+                      {item.text}
                     </Link>
                 </div>
               )
@@ -138,7 +146,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               <div className="flex items-center">
                 <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-[#D0BCFF]">
                   <img
-                    src="/default-avatar.png"
+                    src="https://loyal-cn.oss-ap-southeast-1.aliyuncs.com/loyal.jpg"
                     alt="Avatar"
                     className="object-cover w-full h-full"
                   />

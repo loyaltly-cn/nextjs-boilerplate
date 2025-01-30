@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       data: {
         email,
         password: password,
-        name,
+        username:name,
         phoneNumber,
         dateOfBirth: new Date(dateOfBirth),
         city,

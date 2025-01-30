@@ -2,27 +2,26 @@
 
 import { useState, useEffect } from 'react'
 import { toast } from '@/components/ui/toast'
-import Link from 'next/link'
 
 interface Application {
-  id: string
-  userId: string
-  name: string | null
-  email: string | null
-  address: string
-  city: string
-  state: string
-  postalCode: string
-  country: string
-  phone: string
-  dateOfBirth: string
-  partnerName: string
-  partnerDateOfBirth: string
-  answers: Array<{
-    id: string
-    value: string
-  }>
-  createdAt: string
+    id:             string
+    name:           String
+    age:            number
+    birthDate:      Date
+    height:         number
+    weight:         number
+    ethnicity:      String
+    education:      String
+    maritalStatus:  String
+    hasChildren:    String
+    address:        String
+    city:           String
+    state:          String
+    postalCode:     String
+    country:        String
+    phoneNumber:    String
+    email:          String
+    createdAt:      Date
   user: {
     name: string | null
     email: string
@@ -40,12 +39,10 @@ export default function SurrogacyApplicationsPage() {
 
   const fetchApplications = async () => {
     try {
-      const res = await fetch('/server/api/surrogacy-applications')
+      const res = await fetch('/server/api/surrogate-mother-applications')
       const data = await res.json()
-      console.log(data)
-      if (data.code === 200) {
-        setApplications(data.data)
-      }
+      
+      setApplications(data)
     } catch (error) {
       toast('Failed to fetch applications', 'error')
     } finally {
@@ -64,11 +61,12 @@ export default function SurrogacyApplicationsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-[#E6E1E5]">Surrogacy Applications</h1>
+        <h1 className="text-2xl font-bold text-[#E6E1E5]">Surrogacy sd</h1>
       </div>
 
       <div className="space-y-4">
         {applications.map((application) => (
+        
           <div
             key={application.id}
             className="bg-[#2B2930] rounded-3xl border border-[#48464C]/30 overflow-hidden"
@@ -77,7 +75,7 @@ export default function SurrogacyApplicationsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-[#E6E1E5] font-medium">
-                    {application.name || application.user.name || application.user.email}
+                    {application.name}
                   </h3>
                   <p className="text-[#CAC4D0] text-sm">
                     Submitted: {new Date(application.createdAt).toLocaleString()}
@@ -93,27 +91,18 @@ export default function SurrogacyApplicationsPage() {
               {expandedId === application.id && (
                 <div className="mt-4 text-[#CAC4D0]">
                   <p>Email: {application.email}</p>
-                  <p>User ID: {application.userId}</p>
                   <p>Address: {application.address}</p>
                   <p>City: {application.city}</p>
                   <p>State: {application.state}</p>
                   <p>Postal Code: {application.postalCode}</p>
                   <p>Country: {application.country}</p>
-                  <p>Phone: {application.phone}</p>
-                  <p>Date of Birth: {application.dateOfBirth}</p>
-                  <p>Partner Name: {application.partnerName}</p>
-                  <p>Partner Date of Birth: {application.partnerDateOfBirth}</p>
-                  <div>
-                    <p>Options:</p>
-                    <ul className="list-disc pl-5">
-                      {application.answers.map(answer => (
-                        <li key={answer.id}>
-                          <strong>{answer.id}:</strong> {answer.value}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {/* Add more fields as needed */}
+                  <p>Phone: {application.phoneNumber}</p>
+                  <p>Height: {application.height} cm</p>
+                  <p>Weight: {application.weight} kg</p>
+                  <p>Ethnicity: {application.ethnicity}</p>
+                  <p>Education: {application.education}</p>
+                  <p>Marital Status: {application.maritalStatus}</p>
+                  <p>Has Children: {application.hasChildren}</p>
                 </div>
               )}
             </div>

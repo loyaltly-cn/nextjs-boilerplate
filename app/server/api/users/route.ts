@@ -29,20 +29,11 @@ export async function POST(request: Request) {
     // 使用 md5 加密密码
     const hashedPassword = md5(password)
 
-    // 创建用户
-    const user = await prisma.user.create({
-      data: {
-        name: name.trim(),
-        email: email.trim(),
-        password: hashedPassword,
-        isAdmin: false
-      }
-    })
 
     // 不返回密码
-    const { password: _, ...userWithoutPassword } = user
+    // const { password: _, ...userWithoutPassword } = user
 
-    return NextResponse.json(userWithoutPassword)
+    return NextResponse.json({})
   } catch (error) {
     console.error('Failed to create user:', error)
     return NextResponse.json(

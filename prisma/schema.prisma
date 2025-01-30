@@ -31,6 +31,7 @@ model User {
   surrogacyApplications SurrogacyApplication[]
   surrogateMotherApplications SurrogateMotherApplication[]
   role                  Role     @default(INTENDED_PARENT)
+  username              String   @unique
 }
 
 model Account {
@@ -125,17 +126,6 @@ enum ChatStatus {
   CLOSED
 }
 
-model AboutItem {
-  id          String   @id @default(cuid())
-  imageUrl    String // 存储在 Vercel Blob 中的图片 URL
-  title       String
-  description String
-  content     String   @db.Text
-  order       Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
 
 model AboutVideo {
   id        String   @id @default(cuid())
@@ -148,28 +138,6 @@ model AboutVideo {
   @@map("about_videos")
 }
 
-model View {
-  id         String   @id @default(cuid())
-  title      String
-  desc       String
-  background String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  isActive   Boolean  @default(true)
-  order      Int      @default(0)
-
-  @@map("views")
-}
-
-model AppointmentOption {
-  id        String   @id @default(cuid())
-  text      String
-  options   String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("appointment_options")
-}
 
 model SurrogacyApplication {
   id                 String    @id @default(cuid())
@@ -193,20 +161,6 @@ model SurrogacyApplication {
   @@map("surrogacy_applications")
 }
 
-// 预约选项表
-model SurrogacyOption {
-  id        String   @id @default(cuid())
-  key       String   @unique // 用于前端识别的唯一键
-  type      String // 选项类型：'radio', 'text' 等
-  label     String // 选项标签
-  options   Json[] // [{text: string, value: string}] - 对于单选/多选类型
-  required  Boolean  @default(false)
-  order     Int // 排序
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("surrogacy_options")
-}
 
 model SurrogateMotherApplication {
   id             String   @id @default(cuid())
@@ -230,4 +184,26 @@ model SurrogateMotherApplication {
   updatedAt      DateTime @updatedAt
   userId         String
   user           User     @relation(fields: [userId], references: [id])
+}
+
+model Information{
+  id String @id @default(cuid())
+  title String
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  url String[]
+  type InformationType
+}
+
+enum InformationType {
+  INTENDED_PARENT // 准父母
+  SURROGATE_MOTHER // 代孕母
+  Other
+}
+
+model Comments{
+  id String @id @default(cuid())
+  name String
+  content String
 }

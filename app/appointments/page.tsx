@@ -23,6 +23,7 @@ interface Appointment {
   appointmentTime: string
   createdAt: string
   user: User
+  type: string
 }
 
 export default function AppointmentsPage() {
@@ -103,6 +104,14 @@ export default function AppointmentsPage() {
                       <p className="text-[#CAC4D0] text-sm mb-1">Email</p>
                       <p className="text-[#E6E1E5]">{appointment.user.email}</p>
                     </div>
+                    {
+                      appointment.type && (
+                        <div>
+                          <p className="text-[#CAC4D0] text-sm mb-1">type</p>
+                          <p className="text-[#E6E1E5]">{appointment.type}</p>
+                        </div>
+                      )
+                    }
                     {appointment.user.dateOfBirth && (
                       <div>
                         <p className="text-[#CAC4D0] text-sm mb-1">Date of Birth</p>
@@ -139,12 +148,6 @@ export default function AppointmentsPage() {
                       <div>
                         <p className="text-[#CAC4D0] text-sm mb-1">Postal Code</p>
                         <p className="text-[#E6E1E5]">{appointment.user.postalCode}</p>
-                      </div>
-                    )}
-                    {appointment.user.postalCode && (
-                      <div>
-                        <p className="text-[#CAC4D0] text-sm mb-1">type</p>
-                        {/* <p className="text-[#E6E1E5]">{appointment.type}</p> */}
                       </div>
                     )}
                   </div>

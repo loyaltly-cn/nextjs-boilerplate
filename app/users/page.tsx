@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Ripple } from '@/components/ui/ripple'
-
+import { useLanguage } from '@/app/language';
 interface User {
   id: string
   name: string | null
@@ -99,11 +99,11 @@ export default function Users() {
       </div>
     )
   }
-
+  const { translations } = useLanguage();
   return (
     <div className="min-h-screen bg-[#1C1B1F] p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-normal text-[#E6E1E5] mb-8">Users</h1>
+        <h1 className="text-2xl font-normal text-[#E6E1E5] mb-8">{translations.user.title}</h1>
         
         {users.length === 0 ? (
           <div className="bg-[#2B2930] rounded-3xl shadow-lg p-20">
@@ -130,11 +130,11 @@ export default function Users() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[#48464C]">
-                    <th className="text-left p-4 text-[#CAC4D0]">Name</th>
-                    <th className="text-left p-4 text-[#CAC4D0]">Email</th>
-                    <th className="text-left p-4 text-[#CAC4D0]">Verified</th>
-                    <th className="text-left p-4 text-[#CAC4D0]">Joined</th>
-                    <th className="text-left p-4 text-[#CAC4D0]">Actions</th>
+                    {
+                      translations.user.th.map((th:string, index:number) => (
+                        <th key={index} className="text-left p-4 text-[#CAC4D0]">{th}</th>
+                      ))
+                    }
                   </tr>
                 </thead>
                 <tbody>
@@ -158,17 +158,6 @@ export default function Users() {
                         </div>
                       </td>
                       <td className="p-4 text-[#E6E1E5]">{user.email}</td>
-                      <td className="p-4">
-                        {user.emailVerified ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#1B4B2C] text-[#A6F4C5]">
-                            Verified
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#601410] text-[#F2B8B5]">
-                            Not verified
-                          </span>
-                        )}
-                      </td>
                       <td className="p-4 text-[#CAC4D0]">
                         {new Date(user.createdAt).toLocaleDateString()}
                       </td>

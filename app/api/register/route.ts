@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const user = await prisma.user.create({
       data: {
         email,
-        name,
+        username:name,
         password, // 直接存储前端传来的加密密码
       },
     })

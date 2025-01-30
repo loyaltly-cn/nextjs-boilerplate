@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { md5 } from '@/lib/utils'
 
 export async function POST(request: Request) {
   const body = await request.json()
   try {
-    const { email, password, name, phoneNumber, dateOfBirth, city, country, postalCode, address, role } = body
+    const { email, password,} = body
 
     if (!email || !password) {
       return NextResponse.json({
@@ -25,6 +24,8 @@ export async function POST(request: Request) {
       })
     }
 
+    console.log(body);
+    
     const user = await prisma.user.create({
       data: body
     })

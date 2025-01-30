@@ -36,6 +36,8 @@ export default function LoginPage() {
       router.push('/')
       toast('登录成功', 'success')
     } catch (error) {
+      console.log(error);
+      
       toast(
         error instanceof Error ? error.message : '登录失败',
         'error'
