@@ -6,6 +6,7 @@ import { DashboardLayout } from '@/components/ui/dashboard-layout'
 import LanguageWrapper from "@/components/providers/LanguageWrapper";
 import { Geist, Geist_Mono} from "next/font/google";
 import { LanguageProvider } from "@/app/language";
+import ChangeLanguage from "@/components/providers/changeLanguage";
 const geist = Geist({
   subsets: ["latin"],
 })
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body className={geist.className}>
         <LanguageProvider>
           <LanguageWrapper className={`${geistSans.variable} ${geistMono.variable}`}>
+            <ChangeLanguage />
             <AuthProvider>
               <DashboardLayout>
                 {children}

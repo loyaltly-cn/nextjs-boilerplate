@@ -61,5 +61,12 @@ export default {
     user:{
         title:'Users',
         th:['Name','Email','Joined','Action']
+    },
+    login:{
+        title:'Login', 
+        email:'Email',
+        password:'Password',
+        other:'Or continue with',
+        Register:'Don\'t have an account? Register',
     }
 }

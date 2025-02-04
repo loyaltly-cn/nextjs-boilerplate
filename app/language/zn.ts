@@ -62,5 +62,11 @@ export default {
     user:{
         title:'用户',
         th:['名称','邮件','创建日期','操作']
+    },
+    login:{
+        title:'登录', 
+        email:'邮箱',
+        password:'密码',
+        Register:'没有账号？去注册',
     }
 }
