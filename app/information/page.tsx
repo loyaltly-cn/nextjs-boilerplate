@@ -10,10 +10,12 @@ export default function Information() {
   const [formData, setFormData] = useState({
     id: null,
     title: '',
+    en_title: '',
+    zn_title: '',
     en_content: '',
     zn_content: '',
     imageUrl: '',
-    type: '',
+    type: 'INTENDED_PARENT',
   });
   const [imageUploading, setImageUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -85,9 +87,9 @@ export default function Information() {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: formData.title,
+          title: JSON.stringify({ en: formData.en_title, zn: formData.zn_title }),
           content: JSON.stringify({ en: formData.en_content, zn: formData.zn_content }),
-          url: formData.imageUrl,
+          url: [formData.imageUrl],
           type: formData.type,
         }),
       });
@@ -98,10 +100,12 @@ export default function Information() {
         setFormData({
           id: null,
           title: '',
+          en_title: '',
+          zn_title: '',
           en_content: '',
           zn_content: '',
           imageUrl: '',
-          type: '',
+          type: 'INTENDED_PARENT',
         });
       }
     } catch (error) {
@@ -111,7 +115,7 @@ export default function Information() {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`/server/api/information/${id}`, {
+      const response = await fetch(`/server/api/information?id=${id}`, {
         method: 'DELETE',
       });
 
@@ -127,6 +131,8 @@ export default function Information() {
     setFormData({
       id: info.id,
       title: info.title,
+      en_title: info.en_title,
+      zn_title: info.zn_title,
       en_content: JSON.parse(info.content).en,
       zn_content: JSON.parse(info.content).zn,
       imageUrl: info.url,
@@ -135,7 +141,7 @@ export default function Information() {
     setShowModal(true);
   };
 
-  return (
+    return (
     <div className="space-y-4 h-full">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-[#E6E1E5]">Information</h1>
@@ -220,8 +226,20 @@ export default function Information() {
                   <input
                     type="text"
                     placeholder="Enter title"
-                    value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                    value={formData.en_title}
+                    onChange={(e) => setFormData(prev => ({ ...prev, en_title: e.target.value }))}
+                    className="w-full p-3 bg-[#1E1E1E] border border-[#333] rounded-lg focus:outline-none focus:border-[#BB86FC]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#CAC4D0] mb-1">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="中文标题"
+                    value={formData.zn_title}
+                    onChange={(e) => setFormData(prev => ({ ...prev, zn_title: e.target.value }))}
                     className="w-full p-3 bg-[#1E1E1E] border border-[#333] rounded-lg focus:outline-none focus:border-[#BB86FC]"
                   />
                 </div>
@@ -317,16 +335,19 @@ export default function Information() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#CAC4D0] mb-1">
+                  <label htmlFor="type-select" className="block text-sm font-medium text-[#CAC4D0] mb-1">
                     Type
                   </label>
-                  <input
-                    type="text"
-                    placeholder="Enter type"
+                  <select
+                    id="type-select"
                     value={formData.type}
                     onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
                     className="w-full p-3 bg-[#1E1E1E] border border-[#333] rounded-lg focus:outline-none focus:border-[#BB86FC]"
-                  />
+                  >
+                    <option value="INTENDED_PARENT">Intended Parent</option>
+                    <option value="SURROGATE_MOTHER">Surrogate Mother</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
                 <div className="flex justify-end gap-3 pt-4">
                   <button

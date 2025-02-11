@@ -72,7 +72,7 @@ export async function DELETE(request: Request) {
     await prisma.information.delete({
       where: { id },
     });
-    return NextResponse.json(null, { status: 204 });
+    return NextResponse.json(null, { status: 200 });
   } catch (error) {
     console.error('Failed to delete information:', error);
     return NextResponse.json({ error: 'Failed to delete information' }, { status: 500 });

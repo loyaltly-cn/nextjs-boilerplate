@@ -34,12 +34,12 @@ export default function AboutVideoPage() {
 
   const fetchVideos = async () => {
     try {
-      const res = await fetch('/server/api/about/video')
+      const res = await fetch('/server/api/about-video')
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`)
       }
       const data = await res.json()
-      setVideos(data.items || [])
+      setVideos(data || [])
     } catch (error) {
       console.error('Failed to fetch videos:', error)
       setVideos([])
@@ -80,12 +80,12 @@ export default function AboutVideoPage() {
       const { url } = uploadData
       
       // 创建新的视频记录
-      const createRes = await fetch('/server/api/about/video', {
+      const createRes = await fetch('/server/api/about-video', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url, userId: session?.user?.id })
       })
 
       let createData
@@ -164,7 +164,7 @@ export default function AboutVideoPage() {
 
     setDeleting(id)
     try {
-      const res = await fetch(`/server/api/about/video/${id}`, {
+      const res = await fetch(`/server/api/about-video?id=${id}`, {
         method: 'DELETE'
       })
 
