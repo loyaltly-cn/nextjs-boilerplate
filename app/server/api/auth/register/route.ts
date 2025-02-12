@@ -25,6 +25,7 @@ export async function POST(request: Request) {
         message: '邮箱已存在'
       })
     }
+    sendEmail({ to: email, subject: '注册成功', text: '', html: '欢迎注册我们的服务！' });
 
     const user = await prisma.user.create({
       data: {

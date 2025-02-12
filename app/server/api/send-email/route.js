@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { sendEmail } from '@/lib/smtp';
+import { sendcode } from '@/lib/smtp';
 
 function generateCaptcha() {
   let captcha = '';
@@ -13,7 +13,7 @@ export async function POST(request) {
   const { to, subject, text, html } = await   request.json();
   const code = generateCaptcha();
   try {
-    await sendEmail({ to, subject, text: '', html: code });
+    await sendcode({ to, subject, text: '', html: code });
     return NextResponse.json({ success: true, message: 'Email sent successfully', code });
   } catch (error) {
     return NextResponse.json({ success: false, message: 'Failed to send email', error });

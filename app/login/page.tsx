@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from '@/components/ui/toast'
 import { md5 } from '@/lib/utils'
 import { useLanguage } from '@/app/language';
+
 export default function LoginPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -16,27 +16,33 @@ export default function LoginPage() {
     password: ''
   })
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      const result = await signIn('credentials', {
-        email: formData.email,
-        password: md5(formData.password),
-        redirect: false
-      })
+      const response = await fetch('/server/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: md5(formData.password),
+        }),
+      });
 
-      if (result?.error) {
-        if (result.error === 'CredentialsSignin') {
-          throw new Error('邮箱或密码错误')
-        }
-        throw new Error(result.error)
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || '登录失败');
       }
 
-      router.push('/')
-      toast('登录成功', 'success')
+      const userData = await response.json();
+      if(userData.data.isAdmin){
+        toast('登录成功', 'success')
+        router.push('/')
+      }else toast('您没有权限', 'error')
+
+      // router.push('/')
+      
     } catch (error) {
       console.log(error);
       
