@@ -67,6 +67,14 @@ export default {
         email:'Email',
         password:'Password',
         other:'Or continue with',
-        Register:'Don\'t have an account? Register',
+        Register:'Don\'t have an account? Register', 
+        pl_email:'Enter your email',
+        pl_password:'Enter your password',
+    },
+    setting:{
+        title:'setting',
+        old_password:'old password',
+        new_password:'new password',
+        save:'save',
     }
 }

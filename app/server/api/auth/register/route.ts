@@ -42,7 +42,13 @@ export async function POST(request: Request) {
       }
     })
 
-    // await sendEmail({ to: user.email, subject: '注册成功', text: '', html: '欢迎注册我们的服务！' });
+    fetch('/api/welcome', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: user.email,
+        name: user.username
+      })
+    })
 
     return NextResponse.json({
       code: 200,

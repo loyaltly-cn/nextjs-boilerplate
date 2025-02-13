@@ -81,7 +81,7 @@ export default function Information() {
 
     try {
       const method = formData.id ? 'PUT' : 'POST';
-      const url = formData.id ? `/server/api/information/${formData.id}` : '/server/api/information';
+      const url = formData.id ? `/api/information?id=${formData.id}` : '/server/api/information';
 
       const response = await fetch(url, {
         method,
@@ -89,7 +89,7 @@ export default function Information() {
         body: JSON.stringify({
           title: JSON.stringify({ en: formData.en_title, zn: formData.zn_title }),
           content: JSON.stringify({ en: formData.en_content, zn: formData.zn_content }),
-          url: [formData.imageUrl],
+          url: typeof formData.imageUrl === 'string' ? [formData.imageUrl] : formData.imageUrl,
           type: formData.type,
         }),
       });
@@ -128,11 +128,13 @@ export default function Information() {
   };
 
   const openEditModal = (info: any) => {
+    console.log(info);
+    
     setFormData({
       id: info.id,
       title: info.title,
-      en_title: info.en_title,
-      zn_title: info.zn_title,
+      en_title: JSON.parse(info.title).en,
+      zn_title: JSON.parse(info.title).zn,
       en_content: JSON.parse(info.content).en,
       zn_content: JSON.parse(info.content).zn,
       imageUrl: info.url,
@@ -163,11 +165,11 @@ export default function Information() {
         <ul className="space-y-4">
           {information.map((info: any) => (
             <li key={info.id} className="p-4 bg-[#1E1E1E] rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold">{info.title}</h2>
-              <p>{info.content}</p>
-              <a href={info.url} className="text-blue-500 hover:underline">
-                {info.url}
-              </a>
+              <h2 className="text-xl font-semibold">{JSON.parse(info.title).en}</h2>
+              <h2 className="text-xl font-semibold">{JSON.parse(info.title).zn}</h2>
+              <p>{JSON.parse(info.content).en}</p>
+              <p>{JSON.parse(info.content).zn}</p>
+              <img src={info.url} alt="" width={100} height={100}/>
               <p>Type: {info.type}</p>
               <div className="flex space-x-2 mt-2">
                 <button

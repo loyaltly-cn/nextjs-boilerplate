@@ -98,7 +98,7 @@ export default function LoginPage() {
                   type="email"
                   value={formData.email}
                   aria-label="Email"
-                  placeholder="Enter your email"
+                  placeholder={translations.login.pl_email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                   className="w-full pl-10 pr-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
                   required
@@ -110,14 +110,14 @@ export default function LoginPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-[#CAC4D0] mb-2">
-                Password
+                {translations.login.password}
               </label>
               <div className="relative">
                 <input
                   type="password"
                   value={formData.password}
                    aria-label="Password"
-                  placeholder="Enter your password"
+                  placeholder={translations.login.pl_password}
                   onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                   className="w-full pl-10 pr-4 py-2 bg-[#1C1B1F] text-[#E6E1E5] rounded-xl border border-[#48464C]/30 focus:outline-none focus:ring-2 focus:ring-[#D0BCFF]"
                   required
@@ -137,29 +137,18 @@ export default function LoginPage() {
                   <div className="w-5 h-5 border-2 border-[#381E72] border-t-transparent rounded-full animate-spin mr-2" />
                   Loading...
                 </div>
-              ) : 'Login'}
+              ) : translations.login.title}
             </button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#48464C]/30"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-[#2B2930] text-[#CAC4D0]">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-          </div>
+ 
 
-          <p className="mt-4 text-center text-[#CAC4D0]">
+          {/* <p className="mt-4 text-center text-[#CAC4D0]">
             Don't have an account?{' '}
             <Link href="/register" className="text-[#D0BCFF] hover:text-[#E8DEF8]">
               Register
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
 

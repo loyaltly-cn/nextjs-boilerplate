@@ -46,12 +46,11 @@ export default function AppointmentsPage() {
 
   const fetchAppointments = async () => {
     try {
-      const res = await fetch('/api/appointments')
+      const res = await fetch('/server/api/appointments')
       const data = await res.json()
-      if (data.code === 200) {
-        setAppointments(data.data)
-        console.log(data.data)
-      }
+      console.log(data.appointments);
+      
+      setAppointments(data.appointments)
     } catch (error) {
       toast('Failed to fetch appointments', 'error')
     } finally {

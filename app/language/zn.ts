@@ -68,5 +68,13 @@ export default {
         email:'邮箱',
         password:'密码',
         Register:'没有账号？去注册',
+        pl_email:'请输入邮箱',
+        pl_password:'请输入密码',
+    },
+    setting:{
+        title:'设置',
+        old_password:'旧密码',
+        new_password:'新密码',
+        save:'保存',
     }
 }

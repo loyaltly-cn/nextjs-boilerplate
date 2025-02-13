@@ -50,7 +50,7 @@ export async function DELETE(request: Request) {
     await prisma.comments.delete({
       where: { id },
     });
-    return NextResponse.json(null, { status: 204 });
+    return NextResponse.json(null, { status: 200 });
   } catch (error) {
     console.error('Failed to delete comment:', error);
     return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 });

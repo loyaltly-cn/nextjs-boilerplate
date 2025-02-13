@@ -32,21 +32,46 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
-  try {
-    const appointments = await prisma.appointment.findMany({
-      orderBy: {
-        appointmentTime: 'desc'
-      },
-      include: {
-        user: true // 确保包含用户信息
-      }
-    })
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
 
-    console.log(NextResponse.json({ appointments }))
-    return NextResponse.json({ appointments })
+  try {
+    if (userId) {
+      // 获取指定用户的最新预约
+      const latestAppointment = await prisma.appointment.findFirst({
+        where: { userId: userId },
+        orderBy: { appointmentTime: 'desc' },
+        include: {
+          user: true // 确保包含用户信息
+        }
+      });
+
+      if (!latestAppointment) {
+        return NextResponse.json({ error: 'No appointments found for this user' }, { status: 404 });
+      }
+
+      return NextResponse.json({
+        code: 200,
+        data: latestAppointment
+      });
+    } else {
+      // 获取所有预约
+      const appointments = await prisma.appointment.findMany({
+        orderBy: {
+          appointmentTime: 'desc'
+        },
+        include: {
+          user: true // 确保包含用户信息
+        }
+      });
+
+      return NextResponse.json({ appointments });
+    }
   } catch (error) {
-    console.error('Failed to fetch appointments:', error)
-    return new NextResponse('Internal Server Error', { status: 500 })
+    console.error('Failed to fetch appointments:', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 } 
+
+

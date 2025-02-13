@@ -11,7 +11,6 @@ export default function Settings() {
     newPassword: ''
   });
   const [loading, setLoading] = useState(false);
-
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'zn' : 'en');
   };
@@ -51,14 +50,12 @@ export default function Settings() {
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold text-[#E6E1E5] mb-4 text-center">Settings</h1>
-      <div onClick={toggleLanguage} className="cursor-pointer mb-4">
-        切换语言: {translations.language}
-      </div>
+      <h1 className="text-2xl font-bold text-[#E6E1E5] mb-4 text-center">{translations.setting.title}</h1>
+      
       <form onSubmit={handleChangePassword} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-[#CAC4D0] mb-1">
-            旧密码
+            {translations.setting.old_password}
           </label>
           <input
             type="password"
@@ -70,7 +67,7 @@ export default function Settings() {
         </div>
         <div>
           <label className="block text-sm font-medium text-[#CAC4D0] mb-1">
-            新密码
+            {translations.setting.new_password}
           </label>
           <input
             type="password"
@@ -85,7 +82,7 @@ export default function Settings() {
           disabled={loading}
           className="w-full px-4 py-2 bg-[#D0BCFF] text-[#381E72] rounded-xl hover:bg-[#E8DEF8] transition-colors disabled:opacity-50"
         >
-          {loading ? '处理中...' : '修改密码'}
+          {loading ? '...' : translations.setting.save}
         </button>
       </form>
     </div>
