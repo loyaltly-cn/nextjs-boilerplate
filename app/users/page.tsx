@@ -12,6 +12,7 @@ interface User {
   emailVerified: Date | null
   image: string | null
   createdAt: string
+  username: string
 }
 
 const EmptyIcon = () => (
@@ -148,12 +149,12 @@ export default function Users() {
                           {user.image && (
                             <img 
                               src={user.image} 
-                              alt={user.name || ''} 
+                              alt={user.username || ''} 
                               className="w-8 h-8 rounded-full"
                             />
                           )}
                           <span className="text-[#E6E1E5]">
-                            {user.name || 'No name'}
+                            {user.username || 'No name'}
                           </span>
                         </div>
                       </td>

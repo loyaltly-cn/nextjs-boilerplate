@@ -24,6 +24,15 @@ interface Appointment {
   createdAt: string
   user: User
   type: string
+  name: string
+  phone: string
+  email: string
+  answers: Array<{
+    id: string
+    value: string
+  }>
+  address: string
+  dateOfBirth: string
 }
 
 export default function AppointmentsPage() {
@@ -101,7 +110,7 @@ export default function AppointmentsPage() {
                 <div className="mt-6 pt-6 border-t border-[#48464C]/30">
                   <div className="grid grid-cols-2 gap-6">
                     <div>
-                      <p className="text-[#CAC4D0] text-sm mb-1">Email</p>
+                      <p className="text-[#CAC4D0] text-sm mb-1">Account Email</p>
                       <p className="text-[#E6E1E5]">{appointment.user.email}</p>
                     </div>
                     {
@@ -150,7 +159,57 @@ export default function AppointmentsPage() {
                         <p className="text-[#E6E1E5]">{appointment.user.postalCode}</p>
                       </div>
                     )}
+                    {appointment.phone && (
+                      <div>
+                        <p className="text-[#CAC4D0] text-sm mb-1">phone</p>
+                        <p className="text-[#E6E1E5]">{appointment.phone}</p>
+                      </div>
+                    )}
+                    {appointment.email && (
+                      <div>
+                        <p className="text-[#CAC4D0] text-sm mb-1">email</p>
+                        <p className="text-[#E6E1E5]">{appointment.email}</p>
+                      </div>
+                    )}
+                    {appointment.name && (
+                      <div>
+                        <p className="text-[#CAC4D0] text-sm mb-1">name</p>
+                        <p className="text-[#E6E1E5]">{appointment.name}</p>
+                      </div>
+                    )}
+                    {
+                      appointment.address && (
+                        <div>
+                          <p className="text-[#CAC4D0] text-sm mb-1">address</p>
+                          <p className="text-[#E6E1E5]">{appointment.address}</p>
+                        </div>
+                      )
+                    }
+                    {
+                      appointment.dateOfBirth && (
+                        <div>
+                          <p className="text-[#CAC4D0] text-sm mb-1">dateOfBirth</p>
+                          <p className="text-[#E6E1E5]">{appointment.dateOfBirth}</p>
+                        </div>
+                      )
+                    }
+                      {appointment.answers && (
+                      <div>
+                        <p className="text-[#CAC4D0] text-sm mb-1">Answers</p>
+                        <div>
+                    <p>Options:</p>
+                    <ul className="list-disc pl-5">
+                      {appointment.answers.map(answer => (
+                        <li key={answer.id}>
+                          <strong>{answer.id}:</strong> {answer.value}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+                      </div>
+                    )}
+                  </div>
+
                 </div>
               )}
             </div>

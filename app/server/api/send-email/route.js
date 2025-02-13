@@ -10,12 +10,14 @@ function generateCaptcha() {
 }
 
 export async function POST(request) {
-  const { to, subject, text, html } = await   request.json();
+  const { to, subject, text, html } = await request.json();
   const code = generateCaptcha();
   try {
     await sendcode({ to, subject, text: '', html: code });
     return NextResponse.json({ success: true, message: 'Email sent successfully', code });
   } catch (error) {
+    console.log(error);
+    
     return NextResponse.json({ success: false, message: 'Failed to send email', error });
   }
 } 
