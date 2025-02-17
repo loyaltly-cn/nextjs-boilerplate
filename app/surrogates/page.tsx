@@ -55,7 +55,11 @@ export default function SurrogacyApplicationsPage() {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="min-h-screen bg-[#1C1B1F] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#D0BCFF]"></div>
+      </div>
+    )
   }
 
   return (
@@ -91,11 +95,11 @@ export default function SurrogacyApplicationsPage() {
               {expandedId === application.id && (
                 <div className="mt-4 text-[#CAC4D0]">
                   <p>Email: {application.email}</p>
+                  <p>age: {application.age}</p>
+                  <p>birthDate: {new Date(application.birthDate).toLocaleDateString()}</p>
                   <p>Address: {application.address}</p>
                   <p>City: {application.city}</p>
-                  <p>State: {application.state}</p>
                   <p>Postal Code: {application.postalCode}</p>
-                  <p>Country: {application.country}</p>
                   <p>Phone: {application.phoneNumber}</p>
                   <p>Height: {application.height} cm</p>
                   <p>Weight: {application.weight} kg</p>

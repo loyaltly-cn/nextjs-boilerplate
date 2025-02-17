@@ -3,6 +3,7 @@ import { useLanguage } from '@/app/language';
 
 export default function Home() {
   const { translations } = useLanguage();
+  
   return (
     <div>
       <h1 className="text-3xl font-bold text-[#E6E1E5] mb-8">{translations.dashboard.title}</h1>

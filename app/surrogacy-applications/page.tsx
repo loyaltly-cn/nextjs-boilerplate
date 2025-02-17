@@ -58,7 +58,11 @@ export default function SurrogacyApplicationsPage() {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="min-h-screen bg-[#1C1B1F] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#D0BCFF]"></div>
+      </div>
+    )
   }
 
   return (

@@ -156,7 +156,9 @@ export default function Information() {
       </div>
 
       {loading ? (
-        <div>Loading...</div>
+        <div className="min-h-screen bg-[#1C1B1F] flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#D0BCFF]"></div>
+        </div>
       ) : information.length === 0 ? (
         <div className="text-center text-[#CAC4D0] py-8">
           No items found. Click "Add New" to create one.
@@ -164,7 +166,7 @@ export default function Information() {
       ) : (
         <ul className="space-y-4">
           {information.map((info: any) => (
-            <li key={info.id} className="p-4 bg-[#1E1E1E] rounded-lg shadow-md">
+            <li key={info.id} className="p-4 bg-[#2B2930] rounded-lg shadow-md">
               <h2 className="text-xl font-semibold">{JSON.parse(info.title).en}</h2>
               <h2 className="text-xl font-semibold">{JSON.parse(info.title).zn}</h2>
               <p>{JSON.parse(info.content).en}</p>

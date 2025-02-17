@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import type { Chat } from '@/demo_model'
+import { debounce } from 'lodash'
 
 export default function ChatRoom({ chat: initialChat }: { chat: Chat }) {
   const [chat, setChat] = useState(initialChat)
@@ -42,8 +43,7 @@ export default function ChatRoom({ chat: initialChat }: { chat: Chat }) {
   }, [chat.id, chat.status, chat.messages.length])
 
   // 发送消息
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const sendMessage = async () => {
     if (!input.trim() || isLoading || chat.status !== 'OPEN') return
 
     setIsLoading(true)
@@ -65,6 +65,13 @@ export default function ChatRoom({ chat: initialChat }: { chat: Chat }) {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // 使用 debounce 包装 sendMessage 函数
+  const debouncedSendMessage = useCallback(debounce(sendMessage, 300), [input, chat.status])
+
+  const handleSendClick = () => {
+    debouncedSendMessage()
   }
 
   return (
@@ -121,7 +128,7 @@ export default function ChatRoom({ chat: initialChat }: { chat: Chat }) {
 
       {/* Sticky Input */}
       <div className="border-t border-[#48464C]/30 bg-[#2B2930]">
-        <form onSubmit={handleSubmit} className="p-4">
+        <form onSubmit={(e) => { e.preventDefault(); handleSendClick() }} className="p-4">
           <div className="flex space-x-2">
             <input
               type="text"
@@ -133,7 +140,7 @@ export default function ChatRoom({ chat: initialChat }: { chat: Chat }) {
             />
             <button
               type="submit"
-              disabled={isLoading || chat.status !== 'OPEN'}
+              disabled={isLoading || chat.status !== 'OPEN' || !input.trim()}
               className="px-4 py-2 bg-[#D0BCFF] text-[#381E72] rounded-xl hover:bg-[#E8DEF8] transition-colors disabled:opacity-50"
             >
               Send

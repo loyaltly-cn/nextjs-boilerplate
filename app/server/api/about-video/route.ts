@@ -31,10 +31,10 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(newVideo, { status: 201 });
+    return NextResponse.json(newVideo, { status: 200 });
   } catch (error) {
-    console.error('Failed to create about video:', error);
-    return NextResponse.json({ error: 'Failed to create about video' }, { status: 500 });
+    // console.error('Failed to create about video:', error);
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
 
