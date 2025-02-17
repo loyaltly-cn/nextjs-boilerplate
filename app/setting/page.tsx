@@ -70,7 +70,7 @@ export default function Settings() {
             {translations.setting.new_password}
           </label>
           <input
-            type="password"
+            type="password" 
             value={passwordData.newPassword}
             onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
             className="w-full p-3 bg-[#1E1E1E] border border-[#333] rounded-lg focus:outline-none focus:border-[#BB86FC]"
