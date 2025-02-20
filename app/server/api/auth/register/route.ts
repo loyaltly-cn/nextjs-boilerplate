@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       }
     })
 
-    fetch('/api/welcome-email', {
+    fetch('server/api/welcome-email', {
       method: 'POST',
       body: JSON.stringify({
         email: user.email,

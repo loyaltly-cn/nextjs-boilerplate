@@ -31,14 +31,14 @@ export async function POST(req: Request) {
       )
     }
 
-    // 验证文件大小
-    const maxSize = 100 * 1024 * 1024 // 100MB
-    if (file.size > maxSize) {
-      return NextResponse.json(
-        { error: 'File too large' },
-        { status: 400 }
-      )
-    }
+    // // 验证文件大小
+    // const maxSize = 100 * 1024 * 1024 // 100MB
+    // if (file.size > maxSize) {
+    //   return NextResponse.json(
+    //     { error: 'File too large' },
+    //     { status: 400 }
+    //   )
+    // }
 
     const blob = await put(file.name, file, {
       access: 'public',

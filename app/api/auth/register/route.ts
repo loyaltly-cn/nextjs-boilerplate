@@ -30,6 +30,15 @@ export async function POST(request: Request) {
       data: body
     })
 
+    fetch('/api/welcome-email', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: user.email,
+        name: user.username
+      })
+    })
+
+
     return NextResponse.json({
       code: 200,
       message: '注册成功',
