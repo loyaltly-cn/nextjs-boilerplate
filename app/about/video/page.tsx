@@ -132,15 +132,15 @@ export default function AboutVideoPage() {
         return
       }
 
-      // 验证文件大小
-      const maxSize = 100 * 1024 * 1024 // 100MB
-      if (file.size > maxSize) {
-        toast('File too large. Maximum size is 100MB.', 'error')
-        e.target.value = ''
-        setSelectedFile(null)
-        setPreviewUrl('')
-        return
-      }
+      // // 验证文件大小
+      // const maxSize = 100 * 1024 * 1024 // 100MB
+      // if (file.size > maxSize) {
+      //   toast('File too large. Maximum size is 100MB.', 'error')
+      //   e.target.value = ''
+      //   setSelectedFile(null)
+      //   setPreviewUrl('')
+      //   return
+      // }
 
       setSelectedFile(file)
       // 创建临时预览 URL
