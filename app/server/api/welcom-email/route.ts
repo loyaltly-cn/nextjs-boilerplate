@@ -46,12 +46,14 @@ export async function POST(request: Request) {
     const {email,name} = await request.json();
     console.log(email);
     
-   
-    return NextResponse.json( sendEmail({
+    const rep = await sendEmail({
       from: 'Sapling Surrogacy',
       to: email,
       subject: 'Welcome to Sapling Surrogacy – Your Journey Starts Here / 欢迎加入小树苗代孕中心',
       text: 'text',
       html: render(name),
-  }));
+  })
+  // console.log(rep);
+  
+    return NextResponse.json(rep);
 } 
