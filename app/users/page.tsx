@@ -77,7 +77,7 @@ export default function Users() {
       setUsers(users.filter(user => user.id !== id))
       setDeleteUserId(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete user')
+      setError(err instanceof Error ? '此用户已有预约信息，不可删除' : '此用户已有预约信息，不可删除')
     } finally {
       setIsDeleting(false)
     }
