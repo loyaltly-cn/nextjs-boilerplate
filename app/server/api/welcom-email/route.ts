@@ -53,7 +53,19 @@ export async function POST(request: Request) {
       text: 'text',
       html: render(name),
   })
-  // console.log(rep);
   
-    return NextResponse.json(rep);
+  try {
+    const rep = await sendEmail({
+      from: 'Sapling Surrogacy',
+      to: email,
+      subject: 'Welcome to Sapling Surrogacy – Your Journey Starts Here / 欢迎加入小树苗代孕中心',
+      text: 'text',
+      html: render(name),
+  })
+    return NextResponse.json({ success: true, message: 'Email sent successfully'});
+  } catch (error) {
+    console.log(error);
+    
+    return NextResponse.json({ success: false, message: 'Failed to send email', error });
+  }
 } 
